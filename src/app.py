@@ -12,7 +12,18 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
-    http_method = event['httpMethod']
+    # Log the event to inspect its structure
+    logger.info(f"Received event: {json.dumps(event)}")
+    
+    # Safely access 'httpMethod' and handle missing 'httpMethod' gracefully
+    http_method = event.get('httpMethod', None)
+    
+    if not http_method:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": "Missing httpMethod in event"}),
+            "headers": {"Access-Control-Allow-Origin": "*"}
+        }
     
     # Define common CORS headers
     cors_headers = {
@@ -21,9 +32,6 @@ def lambda_handler(event, context):
         "Access-Control-Allow-Headers": "Content-Type, Authorization"  # Allowed headers
     }
 
-    # Log the event for debugging
-    logger.info(f"Received event: {json.dumps(event)}")
-    
     if http_method == 'POST':
         try:
             data = json.loads(event['body'])
