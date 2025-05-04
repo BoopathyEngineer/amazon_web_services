@@ -23,7 +23,6 @@ Resources:
             Path: /items
             Method: ANY
 
-Resources:
   CrudTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -35,4 +34,3 @@ Resources:
       KeySchema:
         - AttributeName: id
           KeyType: HASH
-
