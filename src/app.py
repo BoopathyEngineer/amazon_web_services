@@ -67,9 +67,10 @@ def lambda_handler(event, context):
                     "headers": cors_headers
                 }
 
+            # Return the actual JSON object instead of stringified JSON
             return {
                 "statusCode": 200,
-                "body": json.dumps(response['Item']),
+                "body": json.dumps(response['Item']),  # Returning the actual JSON object
                 "headers": cors_headers
             }
         except Exception as e:
