@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Lambda CRUD API
+
+Globals:
+  Function:
+    Timeout: 10
+    Runtime: python3.9
+
+Resources:
+  CrudFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.lambda_handler
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref CrudTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /items
+            Method: ANY
+
+Resources:
+  CrudTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: CrudTable
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+
